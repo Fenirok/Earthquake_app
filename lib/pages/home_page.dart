@@ -1,4 +1,8 @@
+import 'dart:ui';
+
+import 'package:earthquake_app/pages/customPageRoute.dart';
 import 'package:earthquake_app/pages/settings_page.dart';
+import 'package:earthquake_app/pages/sortingDialog.dart';
 import 'package:earthquake_app/providers/app_data_provider.dart';
 import 'package:earthquake_app/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +33,8 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.sort),
           ),
           IconButton(
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage())),
+            onPressed: () =>
+                Navigator.push(context, CustomPageRoute(child: SettingsPage())),
             icon: Icon(Icons.settings),
           ),
         ],
@@ -68,80 +73,42 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showSortingDialog() {
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text('Sort by'),
-              content: Consumer<AppDataProvider>(
-                builder: (context, provider, child) => Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    RadioGroup(
-                      label: 'Magnitude-Desc',
-                      groupValue: provider.orderBy,
-                      value: 'magnitude',
-                      onChange: (value) {
-                        provider.setOrder(value!);
-                      },
-                    ),
-                    RadioGroup(
-                      label: 'Magnitude-Asc',
-                      groupValue: provider.orderBy,
-                      value: 'magnitude-asc',
-                      onChange: (value) {
-                        provider.setOrder(value!);
-                      },
-                    ),
-                    RadioGroup(
-                      label: 'Time-Desc',
-                      groupValue: provider.orderBy,
-                      value: 'time',
-                      onChange: (value) {
-                        provider.setOrder(value!);
-                      },
-                    ),
-                    RadioGroup(
-                      label: 'Time-Asc',
-                      groupValue: provider.orderBy,
-                      value: 'time-asc',
-                      onChange: (value) {
-                        provider.setOrder(value!);
-                      },
-                    ),
-                  ],
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false, // This makes the background transparent
+        pageBuilder: (context, animation, secondaryAnimation) => FadeTransition(
+          opacity: animation,
+          child: Stack(
+            children: [
+              BackdropFilter(
+                filter: ImageFilter.blur(sigmaX:4 , sigmaY: 4),
+                child: Container(
+                  color: Colors.black.withOpacity(0.5),
                 ),
               ),
-          actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: Text('Close'))
-          ],
-            ));
-  }
-}
-
-class RadioGroup extends StatelessWidget {
-  final String groupValue;
-  final String value;
-  final String label;
-  final Function(String?) onChange;
-  const RadioGroup({
-    super.key,
-    required this.label,
-    required this.groupValue,
-    required this.value,
-    required this.onChange,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Radio<String>(
-          value: value,
-          groupValue: groupValue,
-          onChanged: onChange,
+              Center(
+                child: SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(2, -1),
+                    end: Offset.zero, // To normal position
+                  ).animate(
+                    CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+                  ),
+                  child: SortingDialog(),
+                ),
+              )
+            ],
+          ),
         ),
-        Text(label)
-      ],
+        transitionDuration: Duration(milliseconds: 200),
+        reverseTransitionDuration: Duration(milliseconds: 200),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+      ),
     );
   }
 }

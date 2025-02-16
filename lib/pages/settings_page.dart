@@ -1,7 +1,9 @@
+import 'package:earthquake_app/providers/ThemeProvider.dart';
 import 'package:earthquake_app/providers/app_data_provider.dart';
 import 'package:earthquake_app/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -14,6 +16,8 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
+    final theme = Provider.of<ThemeProvider>(context, listen: false);
+    var isDark = theme.themeMode == ThemeMode.dark;
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
@@ -56,29 +60,57 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isDark ? Colors.black : Colors.purple,
+                    ),
                     onPressed: () {
                       provider.getEarthQuakeData();
                       showMsg(context, 'Times are Updaeted');
                     },
-                    child: Text('Update Time Changes'),
+                    child: Text(
+                      'Update Time Changes',
+                      style: TextStyle(
+                          color: isDark ? Colors.purpleAccent : Colors.white),
+                    ),
                   ),
                 ],
               ),
             ),
+            Gap(20),
             Text(
               'Location Settings',
               style: Theme.of(context).textTheme.titleLarge,
             ),
+            Gap(20),
             Card(
               child: SwitchListTile(
                 title: Text(provider.currentCity ?? 'Your city is unknown'),
-                subtitle: provider.currentCity == null ? null : Text('EarthQuake data will be shown within ${provider.maxRadiusikm} km radius from ${provider.currentCity}'),
+                subtitle: provider.currentCity == null
+                    ? null
+                    : Text(
+                        'EarthQuake data will be shown within ${provider.maxRadiusikm} km radius from ${provider.currentCity}'),
                 value: provider.shouldUseLocation,
-                onChanged: (value) async{
+                onChanged: (value) async {
                   EasyLoading.show(status: 'Getting location');
                   await provider.setLocation(value);
                   EasyLoading.dismiss();
                 },
+              ),
+            ),
+            Gap(20),
+            Card(
+              child: ListTile(
+                title: Text(isDark ? 'Light Mode' : 'Dark Mode'),
+                trailing: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isDark = !isDark;
+                    });
+                    theme.toggle();
+                  },
+                  icon: Icon(
+                      isDark ? Icons.light_mode : Icons.dark_mode_outlined),
+                ),
               ),
             )
           ],

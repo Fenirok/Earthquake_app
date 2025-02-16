@@ -1,12 +1,24 @@
 import 'package:earthquake_app/pages/home_page.dart';
+import 'package:earthquake_app/providers/ThemeProvider.dart';
 import 'package:earthquake_app/providers/app_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-      create: (ctx) => AppDataProvider(), child: MyApp()));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (ctx) => AppDataProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => ThemeProvider(),
+        ),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,10 +29,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple,brightness: Brightness.dark),
-        useMaterial3: true,
-      ),
+      themeMode: Provider.of<ThemeProvider>(context).themeMode,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
       builder: EasyLoading.init(),
       home: HomePage(),
     );

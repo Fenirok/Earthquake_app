@@ -41,7 +41,7 @@ dependencies:
   geolocator:
   geocoding:
   flutter_easyloading:
-
+  gap:
 dev_dependencies:
   flutter_test:
     sdk: flutter
