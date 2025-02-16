@@ -30,6 +30,7 @@ class _SettingsPageState extends State<SettingsPage> {
               'Time Settings',
               style: Theme.of(context).textTheme.titleLarge,
             ),
+            Gap(10),
             Card(
               child: Column(
                 children: [
@@ -76,12 +77,12 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
             ),
-            Gap(20),
+            Gap(30),
             Text(
               'Location Settings',
               style: Theme.of(context).textTheme.titleLarge,
             ),
-            Gap(20),
+            Gap(10),
             Card(
               child: SwitchListTile(
                 title: Text(provider.currentCity ?? 'Your city is unknown'),
@@ -97,22 +98,29 @@ class _SettingsPageState extends State<SettingsPage> {
                 },
               ),
             ),
-            Gap(20),
+            Gap(30),
             Card(
               child: ListTile(
                 title: Text(isDark ? 'Light Mode' : 'Dark Mode'),
-                trailing: IconButton(
+                trailing: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: isDark ? Colors.white12 : Colors.white,
+                    elevation: 10,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
                   onPressed: () {
                     setState(() {
                       isDark = !isDark;
                     });
                     theme.toggle();
                   },
-                  icon: Icon(
-                      isDark ? Icons.light_mode : Icons.dark_mode_outlined),
+                  child: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
                 ),
               ),
-            )
+            ),
+
           ],
         ),
       ),
