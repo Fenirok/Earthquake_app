@@ -45,24 +45,57 @@ The **Earthquake Tracker App** is a real-time earthquake monitoring application 
 
 🔹 **Offline Mode**: Save recent earthquake data for offline access.
 
-## 📂 Installation & Setup
+Certainly! Below are the **Contributing Guidelines** and **Code of Conduct** sections formatted to match your README style. You can directly copy and paste them below your existing content.
 
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/Fenirok/Earthquake_app.git
-   ```
-2. Navigate to the project directory:
-   ```sh
-   cd Earthquake_app
-   ```
-3. Install dependencies:
-   ```sh
-   flutter pub get
-   ```
-4. Run the app:
-   ```sh
-   flutter run
-   ```
+---
+
+## 🤝 Contributing Guidelines
+
+We welcome contributions from everyone! To contribute:
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/YourFeature`).
+3. Make your changes.
+4. Commit your changes (`git commit -m 'Add new feature'`).
+5. Push to the branch (`git push origin feature/YourFeature`).
+6. Open a pull request describing your changes.
+
+Please ensure your code follows the existing style and includes relevant tests or documentation if necessary.
+
+---
+
+## 🧾 Code of Conduct
+
+This project follows the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
+By participating, you are expected to uphold this code. Please report unacceptable behavior to the project maintainers.
+
+---
+
+Also, here is the corrected **Installation & Setup** section in **Markdown syntax**:
+
+<pre><code>## 📂 Installation & Setup
+
+1. Clone the repository:  
+   ```sh  
+   git clone https://github.com/Fenirok/Earthquake_app.git  
+   ```
+
+2. Navigate to the project directory:  
+   ```sh  
+   cd Earthquake_app  
+   ```
+
+3. Install dependencies:  
+   ```sh  
+   flutter pub get  
+   ```
+
+4. Run the app:  
+   ```sh  
+   flutter run  
+   ```
+</code></pre>
+
 
 ## 📜 License
 
