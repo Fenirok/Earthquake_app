@@ -93,6 +93,43 @@ By participating, you are expected to uphold this code. Please report unacceptab
    flutter run  
    ```
 
+---
+
+## 🤝 Contributing Guidelines
+
+We welcome contributions from the community to improve the Earthquake Tracker App! To contribute:
+
+1. Fork the repository.
+2. Create a new branch:
+   ```sh
+   git checkout -b feature/YourFeatureName
+   ```
+4. Make your changes and commit them:
+   ```sh
+   git commit -m 'Add some feature'
+   ```
+6. Push to your branch:
+   ```sh
+   git push origin feature/YourFeatureName
+   ```
+8. Open a Pull Request describing your changes.
+
+Please make sure your code follows the existing style and is well-documented. Run all tests before submitting a PR.
+
+---
+
+## 📏 Code of Conduct
+
+We are committed to providing a welcoming and inclusive environment for everyone. By participating in this project, you agree to follow our Code of Conduct:
+
+* Be respectful and considerate.
+* Avoid discriminatory or harassing behavior.
+* Respect differing viewpoints and experiences.
+* Use inclusive and constructive language.
+
+Violations of the Code of Conduct may be reported by contacting the maintainers. Appropriate action will be taken to ensure a safe and respectful environment.
+
+---
 
 ## 📜 License
 
