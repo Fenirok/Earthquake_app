@@ -60,7 +60,7 @@ The **Earthquake Tracker App** is a real-time earthquake monitoring application 
    flutter pub get
    ```
 4. Run the app:
-   ```sh
+   ``sh
    flutter run
    ```
 
