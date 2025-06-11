@@ -70,9 +70,6 @@ This project follows the [Contributor Covenant Code of Conduct](https://www.cont
 By participating, you are expected to uphold this code. Please report unacceptable behavior to the project maintainers.
 
 ---
-
-Also, here is the corrected **Installation & Setup** section in **Markdown syntax**:
-
 <pre><code>## 📂 Installation & Setup
 
 1. Clone the repository:  
