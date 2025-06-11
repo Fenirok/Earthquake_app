@@ -1,8 +1,3 @@
-Great! Here's the updated **README** with both **Contributing Guidelines** and **Code of Conduct** sections added **at the end**, without modifying any of your existing content:
-
----
-
-````markdown
 # 🌍 Earthquake Tracker App
 
 ## 📖 Description
