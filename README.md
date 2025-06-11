@@ -48,25 +48,21 @@ The **Earthquake Tracker App** is a real-time earthquake monitoring application 
 ## 📂 Installation & Setup
 
 1. Clone the repository:
-   ```sh
-   git clone https://github.com/Fenirok/Earthquake_app.git
-````
-
+   ```sh
+   git clone https://github.com/Fenirok/Earthquake_app.git
+   ```
 2. Navigate to the project directory:
-
-   ```sh
-   cd Earthquake_app
-   ```
+   ```sh
+   cd Earthquake_app
+   ```
 3. Install dependencies:
-
-   ```sh
-   flutter pub get
-   ```
+   ```sh
+   flutter pub get
+   ```
 4. Run the app:
-
-   ```sh
-   flutter run
-   ```
+   ```sh
+   flutter run
+   ```
 
 ## 📜 License
 
@@ -75,46 +71,3 @@ This project is open-source and available under the **MIT License**.
 ---
 
 Made with ❤️ using Flutter.
-
----
-
-## 🤝 Contributing Guidelines
-
-We welcome contributions from everyone! To contribute:
-
-1. Fork the repository.
-2. Create a new branch:
-
-   ```bash
-   git checkout -b your-feature-name
-   ```
-3. Make your changes and commit:
-
-   ```bash
-   git commit -m "Add: your message here"
-   ```
-4. Push to your fork:
-
-   ```bash
-   git push origin your-feature-name
-   ```
-5. Submit a pull request explaining your changes.
-
-Please make sure your code follows the existing style and passes any lint checks.
-
----
-
-## 📏 Code of Conduct
-
-We are committed to fostering a welcoming and respectful community.
-
-* Be respectful to all participants.
-* Do not use inappropriate or offensive language.
-* Respect different viewpoints and experiences.
-* Gracefully accept constructive criticism.
-* Focus on what is best for the community.
-
-Violations of this code may result in being removed from the project or future contributions being declined.
-
----
-
