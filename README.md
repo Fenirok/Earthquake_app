@@ -1,5 +1,26 @@
 # 🌍 Earthquake Tracker App
 
+![Flutter](https://img.shields.io/badge/Flutter-v3.x-blue?logo=flutter)
+![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-blue?logo=google)
+![License](https://img.shields.io/github/license/Fenirok/Earthquake_app)
+![Last Commit](https://img.shields.io/github/last-commit/Fenirok/Earthquake_app)
+![Issues](https://img.shields.io/github/issues/Fenirok/Earthquake_app)
+![Pull Requests](https://img.shields.io/github/issues-pr/Fenirok/Earthquake_app)
+
+## 📑 Table of Contents
+
+- [📖 Description](#📖-description)
+- [🛠️ Tech Stack & Packages Used](#🛠️-tech-stack--packages-used)
+- [✨ Features](#✨-features)
+- [🚀 How It Works](#🚀-how-it-works)
+- [🔮 Future Scope](#🔮-future-scope)
+- [📂 Installation & Setup](#📂-installation--setup)
+- [🗂️ Project Structure](#🗂️-project-structure)
+- [🤝 Contributing Guidelines](#🤝-contributing-guidelines)
+- [📏 Code of Conduct](#📏-code-of-conduct)
+- [🟢 Issues](#🟢-issues)
+- [📜 License](#📜-license)
+
 ## 📖 Description
 
 The **Earthquake Tracker App** is a real-time earthquake monitoring application built using **Flutter**. It utilizes the **USGS Earthquake API** to fetch real-time data on earthquakes happening worldwide. Users can select a specific date range to view earthquakes within that period, including details such as magnitude, location, time, and severity levels represented by different colors. The app also supports both **light mode** and **dark mode** for enhanced user experience.
@@ -73,27 +94,51 @@ By participating, you are expected to uphold this code. Please report unacceptab
 
 ## 📂 Installation & Setup
 
-1. Clone the repository:  
-   ```sh  
-   git clone https://github.com/Fenirok/Earthquake_app.git  
+1. Clone the repository:
+
+   ```sh
+   git clone https://github.com/Fenirok/Earthquake_app.git
    ```
 
-2. Navigate to the project directory:  
-   ```sh  
-   cd Earthquake_app  
+2. Navigate to the project directory:
+
+   ```sh
+   cd Earthquake_app
    ```
 
-3. Install dependencies:  
-   ```sh  
-   flutter pub get  
+3. Install dependencies:
+
+   ```sh
+   flutter pub get
    ```
 
-4. Run the app:  
-   ```sh  
-   flutter run  
+4. Run the app:
+   ```sh
+   flutter run
    ```
 
 ---
+
+## 🗂️ Project Structure
+
+The following is a high-level overview of the project's folder structure to help you quickly understand where things are and how the codebase is organized:
+
+```sh
+Earthquake_app/
+├── android/                # Android-specific code and resources
+├── ios/                    # iOS-specific code and assets
+├── lib/                    # Main application logic
+│   ├── models/             # Data models (e.g., EarthquakeModel)
+│   ├── pages/              # Application screens/pages
+│   ├── providers/          # State management classes (Provider)
+│   └── utils/              # Utility functions, constants, helpers
+├── test/                   # Unit and widget tests
+├── web/                    # Web-specific assets and icons for web builds
+├── linux/                  # Linux build configuration files
+├── macos/                  # macOS-specific Flutter configuration
+├── windows/                # Windows desktop-specific configuration
+
+```
 
 ## 🤝 Contributing Guidelines
 
@@ -104,15 +149,15 @@ We welcome contributions from the community to improve the Earthquake Tracker Ap
    ```sh
    git checkout -b feature/YourFeatureName
    ```
-4. Make your changes and commit them:
+3. Make your changes and commit them:
    ```sh
    git commit -m 'Add some feature'
    ```
-6. Push to your branch:
+4. Push to your branch:
    ```sh
    git push origin feature/YourFeatureName
    ```
-8. Open a Pull Request describing your changes.
+5. Open a Pull Request describing your changes.
 
 Please make sure your code follows the existing style and is well-documented. Run all tests before submitting a PR.
 
@@ -122,14 +167,25 @@ Please make sure your code follows the existing style and is well-documented. Ru
 
 We are committed to providing a welcoming and inclusive environment for everyone. By participating in this project, you agree to follow our Code of Conduct:
 
-* Be respectful and considerate.
-* Avoid discriminatory or harassing behavior.
-* Respect differing viewpoints and experiences.
-* Use inclusive and constructive language.
+- Be respectful and considerate.
+- Avoid discriminatory or harassing behavior.
+- Respect differing viewpoints and experiences.
+- Use inclusive and constructive language.
 
 Violations of the Code of Conduct may be reported by contacting the maintainers. Appropriate action will be taken to ensure a safe and respectful environment.
 
 ---
+
+## 🟢 Issues
+
+Want to contribute? Check out the [open issues](https://github.com/Fenirok/Earthquake_app/issues) and pick something to work on!
+
+---
+
+### Beginner-Friendly Tags:
+
+- [good first issue](https://github.com/Fenirok/Earthquake_app/issues?q=is%3Aissue+is%3Aopen+label%3A"good+first+issue")
+- [help wanted](https://github.com/Fenirok/Earthquake_app/issues?q=is%3Aissue+is%3Aopen+label%3A"help+wanted")
 
 ## 📜 License
 
