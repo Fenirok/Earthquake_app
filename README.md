@@ -53,6 +53,10 @@ Certainly! Below are the **Contributing Guidelines** and **Code of Conduct** sec
 
 We welcome contributions from everyone! To contribute:
 
+- ✅ Always make your Pull Request (PR) to the `test1` branch, **not** to `master`.
+- 📂 The `test1` branch is used for testing and review before merging stable features to `master`.
+- 🔍 Your PR may be rejected or asked to be resubmitted if it's made to the wrong branch.
+
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature/YourFeature`).
 3. Make your changes.
