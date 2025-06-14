@@ -49,32 +49,6 @@ Certainly! Below are the **Contributing Guidelines** and **Code of Conduct** sec
 
 ---
 
-## 🤝 Contributing Guidelines
-
-We welcome contributions from everyone! To contribute:
-
-- ✅ Always make your Pull Request (PR) to the `test1` branch, **not** to `master`.
-- 📂 The `test1` branch is used for testing and review before merging stable features to `master`.
-- 🔍 Your PR may be rejected or asked to be resubmitted if it's made to the wrong branch.
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/YourFeature`).
-3. Make your changes.
-4. Commit your changes (`git commit -m 'Add new feature'`).
-5. Push to the branch (`git push origin feature/YourFeature`).
-6. Open a pull request describing your changes.
-
-Please ensure your code follows the existing style and includes relevant tests or documentation if necessary.
-
----
-
-## 🧾 Code of Conduct
-
-This project follows the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
-By participating, you are expected to uphold this code. Please report unacceptable behavior to the project maintainers.
-
----
-
 ## 📂 Installation & Setup
 
 1. Clone the repository:  
@@ -101,24 +75,47 @@ By participating, you are expected to uphold this code. Please report unacceptab
 
 ## 🤝 Contributing Guidelines
 
-We welcome contributions from the community to improve the Earthquake Tracker App! To contribute:
+We’re excited to welcome contributions! Please follow these steps to make sure your changes are merged into the correct branch (`test1`):
 
-1. Fork the repository.
-2. Create a new branch:
-   ```sh
-   git checkout -b feature/YourFeatureName
-   ```
-4. Make your changes and commit them:
-   ```sh
-   git commit -m 'Add some feature'
-   ```
-6. Push to your branch:
-   ```sh
-   git push origin feature/YourFeatureName
-   ```
-8. Open a Pull Request describing your changes.
+### 🔁 Step-by-Step Guide
 
-Please make sure your code follows the existing style and is well-documented. Run all tests before submitting a PR.
+1. **Fork the Repository**  
+   Click the **Fork** button in the top-right corner of the [Earthquake Tracker App repository](https://github.com/Fenirok/Earthquake_app) to create your own copy.
+
+2. **Clone Your Fork Locally**  
+   ```bash
+   git clone https://github.com/your-username/Earthquake_app.git
+   cd Earthquake_app
+   ```
+
+3. **Create a New Branch**  
+   It's a good practice to work in a feature branch:
+   ```bash
+   git checkout -b your-feature-name
+   ```
+
+4. **Make Your Changes**  
+   Add your feature, fix bugs, or improve documentation as needed.
+
+5. **Push Your Changes**  
+   ```bash
+   git add .
+   git commit -m "Add: brief description of your changes"
+   git push origin your-feature-name
+   ```
+
+6. **Create a Pull Request**  
+   - Go to your forked repository on GitHub.  
+   - Click **“Compare & pull request”**.  
+   - **Change the base branch to `test1` (not `master`)**:
+     > ✅ `base: Fenirok: test1`  
+     > ✅ `compare: your-username: your-feature-name`
+
+7. **Submit Your Pull Request**  
+   Provide a clear title and description for your changes. Then click **“Create pull request”**.
+
+### ⚠️ Important:
+Please do **not** submit pull requests to the `master` branch. All contributions should target the `test1` branch to ensure stability and testing before merging to production.
 
 ---
 
