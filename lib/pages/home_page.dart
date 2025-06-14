@@ -1,4 +1,6 @@
 import 'dart:ui';
+import 'package:lottie/lottie.dart';
+
 
 import 'package:earthquake_app/pages/customPageRoute.dart';
 import 'package:earthquake_app/pages/settings_page.dart';
@@ -66,8 +68,12 @@ class _HomePageState extends State<HomePage> {
                       );
                     })
             : Center(
-                child: Text('Please Wait'),
-              ),
+                child: Lottie.asset(
+                  'assets/animations/loading.json',
+                  width: 200,
+                ),
+            ),
+
       ),
     );
   }
