@@ -1,5 +1,5 @@
 name: earthquake_app
-description: A new Flutter project.
+description: A real-time earthquake monitoring application
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -30,21 +30,22 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-
+  provider: ^6.0.5
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  intl:
-  provider:
-  http:
-  geolocator:
-  geocoding:
-  flutter_easyloading:
-  gap:
+  cupertino_icons: ^1.0.6
+  intl: ^0.18.1
+  http: ^1.1.0
+  geolocator: ^10.1.0
+  geocoding: ^2.1.1
+  flutter_easyloading: ^3.0.5
+  gap: ^3.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  mockito: ^5.4.2
+  build_runner: ^2.4.6
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
