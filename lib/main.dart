@@ -4,6 +4,7 @@ import 'package:earthquake_app/providers/app_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
+import 'providers/filter_provider.dart';
 
 void main() {
   runApp(
@@ -15,8 +16,9 @@ void main() {
         ChangeNotifierProvider(
           create: (ctx) => ThemeProvider(),
         ),
+        ChangeNotifierProvider(create: (_) => FilterProvider()),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }

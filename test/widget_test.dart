@@ -7,24 +7,144 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:earthquake_app/main.dart';
+import 'package:provider/provider.dart';
+import 'package:earthquake_app/providers/filter_provider.dart';
+import 'package:earthquake_app/widgets/filter_dialog.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('FilterDialog Tests', () {
+    late FilterProvider filterProvider;
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    setUp(() {
+      filterProvider = FilterProvider();
+      debugPrint('Setting up FilterProvider...');
+    });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    testWidgets('Filter Dialog shows and updates correctly', (WidgetTester tester) async {
+      debugPrint('Starting dialog test...');
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      // Track if showDialog is called
+      final dialogShown = ValueNotifier<bool>(false);
+
+      // Build widget tree with Scaffold for proper dialog context
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ChangeNotifierProvider.value(
+              value: filterProvider,
+              child: Builder(
+                builder: (context) => Center(
+                  child: ElevatedButton(
+                    key: Key('show_filter_button'),
+                    onPressed: () {
+                      debugPrint('Button tapped, showing dialog...');
+                      dialogShown.value = true; // Set to true when dialog is shown
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          debugPrint('Building dialog...');
+                          return const FilterDialog(debugMode: true);
+                        },
+                      );
+                    },
+                    child: const Text('Show Filter'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // Debug current widget tree
+      debugPrint('\n=== Widget Tree Before Tap ===');
+      debugDumpApp();
+      debugPrint('===============================\n');
+
+      // Tap button and wait for dialog
+      debugPrint('Tapping "Show Filter" button...');
+      await tester.tap(find.byKey(Key('show_filter_button')));
+      await tester.pump(); // Start animation
+      debugPrint('Dialog animation started...');
+      await tester.pumpAndSettle(); // Wait for animation to complete
+
+      // Debug widget tree after dialog should be shown
+      debugPrint('\n=== Widget Tree After Dialog ===');
+      debugDumpApp();
+      debugPrint('================================\n');
+
+      // Verify that showDialog was called
+      expect(dialogShown.value, isTrue, reason: 'showDialog was not called');
+
+      // Find dialog by key
+      expect(
+        find.byKey(const Key('filter_dialog_alert')),
+        findsOneWidget,
+        reason: 'AlertDialog not found after tapping "Show Filter"',
+      );
+
+      // Verify dialog content
+      expect(
+          find.descendant(
+            of: find.byKey(Key('filter_dialog_alert')),
+            matching: find.byKey(Key('filter_earthquakes_title')),
+          ),
+          findsOneWidget,
+          reason: 'Filter title not found');
+      expect(
+          find.descendant(
+            of: find.byKey(Key('filter_dialog_alert')),
+            matching: find.byKey(Key('date_range_text')),
+          ),
+          findsOneWidget,
+          reason: 'Date Range text not found',
+        );
+      expect(
+          find.descendant(
+            of: find.byKey(Key('filter_dialog_alert')),
+            matching: find.byKey(Key('start_time_text')),
+          ),
+          findsOneWidget,
+          reason: 'Start Time text not found',
+        );
+      expect(
+          find.descendant(
+            of: find.byKey(Key('filter_dialog_alert')),
+            matching: find.text('Select Start Time'),
+          ),
+          findsOneWidget,
+          reason: 'Select Start Time text not found',
+        );
+      expect(
+          find.descendant(
+            of: find.byKey(Key('filter_dialog_alert')),
+            matching: find.text('Select End Time'),
+          ),
+          findsOneWidget,
+          reason: 'Select End Time text not found',
+        );
+
+      // Test date range picker
+      await tester.tap(find.text('Date Range'));
+      await tester.pumpAndSettle();
+      expect(find.byType(DateRangePickerDialog), findsOneWidget, reason: 'DateRangePickerDialog not found');
+
+      // Test both time pickers
+      await tester.tap(find.text('Select Start Time'));
+      await tester.pumpAndSettle();
+      expect(find.byType(TimePickerDialog), findsOneWidget, reason: 'TimePickerDialog not found');
+      Navigator.pop(tester.element(find.byType(TimePickerDialog)));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Select End Time'));
+      await tester.pumpAndSettle();
+      expect(find.byType(TimePickerDialog), findsOneWidget, reason: 'TimePickerDialog not found');
+      Navigator.pop(tester.element(find.byType(TimePickerDialog)));
+      await tester.pumpAndSettle();
+
+      // Test dialog closure
+      await tester.tap(find.text('Apply'));
+      await tester.pumpAndSettle();
+    });
   });
 }
