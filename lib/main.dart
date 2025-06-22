@@ -16,7 +16,7 @@ void main() {
           create: (ctx) => ThemeProvider(),
         ),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       builder: EasyLoading.init(),
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 }

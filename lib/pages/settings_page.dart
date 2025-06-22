@@ -20,22 +20,22 @@ class _SettingsPageState extends State<SettingsPage> {
     var isDark = theme.themeMode == ThemeMode.dark;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
       ),
       body: Consumer<AppDataProvider>(
         builder: (context, provider, child) => ListView(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           children: [
             Text(
               'Time Settings',
               style: Theme.of(context).textTheme.titleLarge,
             ),
-            Gap(10),
+            const Gap(10),
             Card(
               child: Column(
                 children: [
                   ListTile(
-                    title: Text('Start Time'),
+                    title: const Text('Start Time'),
                     subtitle: Text(provider.startTime),
                     trailing: IconButton(
                       onPressed: () async {
@@ -44,11 +44,11 @@ class _SettingsPageState extends State<SettingsPage> {
                           provider.setStartTime(date);
                         }
                       },
-                      icon: Icon(Icons.calendar_month),
+                      icon: const Icon(Icons.calendar_month),
                     ),
                   ),
                   ListTile(
-                    title: Text('End Time'),
+                    title: const Text('End Time'),
                     subtitle: Text(provider.endTime),
                     trailing: IconButton(
                       onPressed: () async {
@@ -57,7 +57,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           provider.setEndTime(date);
                         }
                       },
-                      icon: Icon(Icons.calendar_month),
+                      icon: const Icon(Icons.calendar_month),
                     ),
                   ),
                   ElevatedButton(
@@ -77,12 +77,12 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
             ),
-            Gap(30),
+            const Gap(30),
             Text(
               'Location Settings',
               style: Theme.of(context).textTheme.titleLarge,
             ),
-            Gap(10),
+            const Gap(10),
             Card(
               child: SwitchListTile(
                 title: Text(provider.currentCity ?? 'Your city is unknown'),
@@ -98,7 +98,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 },
               ),
             ),
-            Gap(30),
+            const Gap(30),
             Card(
               child: ListTile(
                 title: Text(isDark ? 'Light Mode' : 'Dark Mode'),
