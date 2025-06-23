@@ -95,8 +95,7 @@ We’re excited to welcome contributions! Please follow these steps to make sure
    ```sh
    git push origin feature/YourFeatureName
    ```
-5. Open a Pull Request describing your changes.
-   ```  
+5. Open a Pull Request describing your changes. 
 
 Please make sure your code follows the existing style and is well-documented. Run all tests before submitting a PR.
 
