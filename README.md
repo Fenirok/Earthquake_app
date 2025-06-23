@@ -87,7 +87,6 @@ We’re excited to welcome contributions! Please follow these steps to make sure
    git clone https://github.com/your-username/Earthquake_app.git
    cd Earthquake_app
    ```
-
 3. Make your changes and commit them:
    ```sh
    git commit -m 'Add some feature'
@@ -97,8 +96,7 @@ We’re excited to welcome contributions! Please follow these steps to make sure
    git push origin feature/YourFeatureName
    ```
 5. Open a Pull Request describing your changes.
-   ```
-
+   ```  
 6. **Create a Pull Request**  
    - Go to your forked repository on GitHub.  
    - Click **“Compare & pull request”**.  
