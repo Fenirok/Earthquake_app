@@ -97,9 +97,8 @@ We’re excited to welcome contributions! Please follow these steps to make sure
    ```
 5. Open a Pull Request describing your changes.
    ```  
-   
-### ⚠️ Important:
-Please do **not** submit pull requests to the `master` branch. All contributions should target the `test1` branch to ensure stability and testing before merging to production.
+
+Please make sure your code follows the existing style and is well-documented. Run all tests before submitting a PR.
 
 ---
 
