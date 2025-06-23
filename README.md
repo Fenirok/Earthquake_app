@@ -88,20 +88,15 @@ We’re excited to welcome contributions! Please follow these steps to make sure
    cd Earthquake_app
    ```
 
-3. **Create a New Branch**  
-   It's a good practice to work in a feature branch:
-   ```bash
-   git checkout -b your-feature-name
+3. Make your changes and commit them:
+   ```sh
+   git commit -m 'Add some feature'
    ```
-
-4. **Make Your Changes**  
-   Add your feature, fix bugs, or improve documentation as needed.
-
-5. **Push Your Changes**  
-   ```bash
-   git add .
-   git commit -m "Add: brief description of your changes"
-   git push origin your-feature-name
+4. Push to your branch:
+   ```sh
+   git push origin feature/YourFeatureName
+   ```
+5. Open a Pull Request describing your changes.
    ```
 
 6. **Create a Pull Request**  
