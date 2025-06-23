@@ -97,16 +97,7 @@ We’re excited to welcome contributions! Please follow these steps to make sure
    ```
 5. Open a Pull Request describing your changes.
    ```  
-6. **Create a Pull Request**  
-   - Go to your forked repository on GitHub.  
-   - Click **“Compare & pull request”**.  
-   - **Change the base branch to `test1` (not `master`)**:
-     > ✅ `base: Fenirok: test1`  
-     > ✅ `compare: your-username: your-feature-name`
-
-7. **Submit Your Pull Request**  
-   Provide a clear title and description for your changes. Then click **“Create pull request”**.
-
+   
 ### ⚠️ Important:
 Please do **not** submit pull requests to the `master` branch. All contributions should target the `test1` branch to ensure stability and testing before merging to production.
 
