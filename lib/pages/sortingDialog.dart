@@ -10,7 +10,7 @@ class SortingDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Sort by'),
+      title: const Text('Sort by'),
       content: Consumer<AppDataProvider>(
         builder: (context, provider, child) => Column(
           mainAxisSize: MainAxisSize.min,
@@ -53,7 +53,7 @@ class SortingDialog extends StatelessWidget {
       actions: [
         TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Close'))
+            child: const Text('Close'))
       ],
     );
   }

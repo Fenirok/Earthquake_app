@@ -62,7 +62,7 @@ class AppDataProvider with ChangeNotifier{
   }
 
   init() {
-    _startTime = getFormatedDateTime(DateTime.now().subtract(Duration(days: 1)).millisecondsSinceEpoch);
+    _startTime = getFormatedDateTime(DateTime.now().subtract(const Duration(days: 1)).millisecondsSinceEpoch);
     _endTime = getFormatedDateTime(DateTime.now().millisecondsSinceEpoch);
     _maxRadiusikm = maxRadiusKmThreshold;
     _setQueryParams();
