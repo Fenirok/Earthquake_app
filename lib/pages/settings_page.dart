@@ -1,6 +1,7 @@
 import 'package:earthquake_app/providers/ThemeProvider.dart';
 import 'package:earthquake_app/providers/app_data_provider.dart';
 import 'package:earthquake_app/utils/helper_functions.dart';
+import 'package:earthquake_app/pages/map_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
@@ -66,7 +67,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     onPressed: () {
                       provider.getEarthQuakeData();
-                      showMsg(context, 'Times are Updaeted');
+                      showMsg(context, 'Times are Updated');
                     },
                     child: Text(
                       'Update Time Changes',
@@ -84,18 +85,43 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             Gap(10),
             Card(
-              child: SwitchListTile(
-                title: Text(provider.currentCity ?? 'Your city is unknown'),
-                subtitle: provider.currentCity == null
-                    ? null
-                    : Text(
-                        'EarthQuake data will be shown within ${provider.maxRadiusikm} km radius from ${provider.currentCity}'),
-                value: provider.shouldUseLocation,
-                onChanged: (value) async {
-                  EasyLoading.show(status: 'Getting location');
-                  await provider.setLocation(value);
-                  EasyLoading.dismiss();
-                },
+              child: Column(
+                children: [
+                  SwitchListTile(
+                    title: Text(provider.currentCity ?? 'Your city is unknown'),
+                    subtitle: provider.currentCity == null
+                        ? Text('Tap to enable location services')
+                        : Text(
+                            'EarthQuake data will be shown within ${provider.maxRadiusikm} km radius from ${provider.currentCity}'),
+                    value: provider.shouldUseLocation,
+                    onChanged: (value) async {
+                      if (value) {
+                        // When turning on location
+                        EasyLoading.show(status: 'Getting your location...');
+                        try {
+                          await provider.setLocation(true);
+                          // After getting location, fetch earthquake data for that area
+                          await provider.getEarthQuakeData();
+                          EasyLoading.dismiss();
+                          showMsg(context,
+                              'Location updated! Showing earthquakes near you.');
+                        } catch (e) {
+                          EasyLoading.dismiss();
+                          showMsg(context,
+                              'Failed to get location. Please check permissions.');
+                        }
+                      } else {
+                        // When turning off location
+                        EasyLoading.show(status: 'Updating settings...');
+                        await provider.setLocation(false);
+                        await provider.getEarthQuakeData();
+                        EasyLoading.dismiss();
+                        showMsg(context,
+                            'Location disabled. Showing global earthquakes.');
+                      }
+                    },
+                  ),
+                ],
               ),
             ),
             Gap(30),
@@ -120,7 +146,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
             ),
-
           ],
         ),
       ),

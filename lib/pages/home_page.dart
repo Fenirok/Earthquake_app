@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:earthquake_app/pages/customPageRoute.dart';
 import 'package:earthquake_app/pages/settings_page.dart';
 import 'package:earthquake_app/pages/sortingDialog.dart';
+import 'package:earthquake_app/pages/map_page.dart';
 import 'package:earthquake_app/providers/app_data_provider.dart';
 import 'package:earthquake_app/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -28,14 +29,54 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('EarthQuake App'),
         actions: [
+          // Location indicator
+          Consumer<AppDataProvider>(
+            builder: (context, provider, child) => provider.shouldUseLocation
+                ? Container(
+                    margin: EdgeInsets.only(right: 8),
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.green.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.location_on, size: 16, color: Colors.green),
+                        SizedBox(width: 4),
+                        Text(
+                          provider.currentCity ?? 'Near you',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : SizedBox.shrink(),
+          ),
           IconButton(
             onPressed: _showSortingDialog,
             icon: Icon(Icons.sort),
+            tooltip: 'Sort earthquakes',
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MapPage()),
+              );
+            },
+            icon: Icon(Icons.map),
+            tooltip: 'View on map',
           ),
           IconButton(
             onPressed: () =>
                 Navigator.push(context, CustomPageRoute(child: SettingsPage())),
             icon: Icon(Icons.settings),
+            tooltip: 'Settings',
           ),
         ],
       ),
@@ -81,7 +122,7 @@ class _HomePageState extends State<HomePage> {
           child: Stack(
             children: [
               BackdropFilter(
-                filter: ImageFilter.blur(sigmaX:4 , sigmaY: 4),
+                filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
                 child: Container(
                   color: Colors.black.withOpacity(0.5),
                 ),

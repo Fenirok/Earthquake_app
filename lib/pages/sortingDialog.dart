@@ -1,6 +1,6 @@
 import 'package:earthquake_app/pages/RadioButtons.dart';
 import 'package:earthquake_app/providers/app_data_provider.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RadioGroup;
 import 'package:provider/provider.dart';
 
 
