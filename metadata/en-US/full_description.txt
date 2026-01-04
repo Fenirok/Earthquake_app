@@ -1,0 +1,9 @@
+QuakeTrace is a free and open-source earthquake tracking application that uses
+public data from the United States Geological Survey (USGS).
+
+The app allows users to view recent earthquakes worldwide or near their current
+location, filter results by date, and see severity information such as magnitude,
+time, and alert level.
+
+QuakeTrace does not contain ads, trackers, or proprietary dependencies.
+Location access is optional and used only to filter nearby earthquakes.

@@ -1,0 +1,3 @@
+Initial release of QuakeTrace.
+
+Features include real-time earthquake data from the USGS API, date-based filtering, magnitude and alert level display, optional location-based filtering, and support for light and dark themes.
