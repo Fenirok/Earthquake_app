@@ -15,30 +15,82 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+
+  void showPillSnackBar(
+      BuildContext context, {
+        required String message,
+        required bool isDark,
+        required double scale,
+        Duration duration = const Duration(seconds: 3),
+      }) {
+    final w = MediaQuery.of(context).size.width;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        behavior: SnackBarBehavior.floating,
+        duration: duration,
+        content: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: w * 0.06,
+            vertical: w * 0.03,
+          ),
+          decoration: BoxDecoration(
+            color: isDark ? Colors.black54 : Colors.purpleAccent,
+            borderRadius: BorderRadius.circular(w * 0.08),
+          ),
+          child: Text(
+            message,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              color: isDark ? Colors.purpleAccent : Colors.white,
+              fontSize: 13 * scale,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final w = size.width;
+    final h = size.height;
+    final scale = w / 375;
     final theme = Provider.of<ThemeProvider>(context, listen: false);
     var isDark = theme.themeMode == ThemeMode.dark;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: Text(
+          'Settings',
+          style: TextStyle(fontSize: 18 * scale),
+        ),
       ),
       body: Consumer<AppDataProvider>(
         builder: (context, provider, child) => ListView(
-          padding: EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(w * 0.02), //8.0
           children: [
             Text(
               'Time Settings',
               style: Theme.of(context).textTheme.titleLarge,
             ),
-            Gap(10),
+            Gap(size.height * 0.01), //10
             Card(
               child: Column(
                 children: [
                   ListTile(
-                    title: Text('Start Time'),
-                    subtitle: Text(provider.startTime),
+                    title: Text(
+                      'Start Time',
+                      style: TextStyle(fontSize: 16 * scale),
+                    ),
+                    subtitle: Text(
+                      provider.startTime,
+                      style: TextStyle(fontSize: 13 * scale),
+                    ),
                     trailing: IconButton(
+                      iconSize: 22 * scale,
                       onPressed: () async {
                         final date = await selectDate();
                         if (date != null) {
@@ -49,9 +101,16 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   ListTile(
-                    title: Text('End Time'),
-                    subtitle: Text(provider.endTime),
+                    title: Text(
+                      'End Time',
+                      style: TextStyle(fontSize: 16 * scale),
+                    ),
+                    subtitle: Text(
+                      provider.endTime,
+                      style: TextStyle(fontSize: 13 * scale),
+                    ),
                     trailing: IconButton(
+                      iconSize: 22 * scale,
                       onPressed: () async {
                         final date = await selectDate();
                         if (date != null) {
@@ -64,33 +123,46 @@ class _SettingsPageState extends State<SettingsPage> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: isDark ? Colors.black : Colors.purple,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: w * 0.06,
+                        vertical: h * 0.012,
+                      ),
                     ),
                     onPressed: () {
                       provider.getEarthQuakeData();
-                      showMsg(context, 'Times are Updated');
+                      showPillSnackBar(context, message: 'Times are Updated', isDark: isDark, scale: scale);
+                      //showMsg(context, 'Times are Updated');
                     },
                     child: Text(
                       'Update Time Changes',
                       style: TextStyle(
+                          fontSize: 14 * scale,
                           color: isDark ? Colors.purpleAccent : Colors.white),
                     ),
                   ),
+                  SizedBox(height: h * 0.018),
                 ],
               ),
             ),
-            Gap(30),
+            Gap(h * 0.04), //30
             Text(
               'Location Settings',
               style: Theme.of(context).textTheme.titleLarge,
             ),
-            Gap(10),
+            Gap(h * 0.015), //10
             Card(
               child: Column(
                 children: [
                   SwitchListTile(
-                    title: Text(provider.currentCity ?? 'Your city is unknown'),
+                    title: Text(
+                      provider.currentCity ?? 'Your city is unknown',
+                      style: TextStyle(fontSize: 16 * scale),
+                    ),
                     subtitle: provider.currentCity == null
-                        ? Text('Tap to enable location services')
+                        ? Text(
+                            'Tap to enable location services',
+                            style: TextStyle(fontSize: 13 * scale),
+                          )
                         : Text(
                             'EarthQuake data will be shown within ${provider.maxRadiusikm} km radius from ${provider.currentCity}'),
                     value: provider.shouldUseLocation,
@@ -103,12 +175,14 @@ class _SettingsPageState extends State<SettingsPage> {
                           // After getting location, fetch earthquake data for that area
                           await provider.getEarthQuakeData();
                           EasyLoading.dismiss();
-                          showMsg(context,
-                              'Location updated! Showing earthquakes near you.');
+                          showPillSnackBar(context, message: "Showing earthquakes near you.", isDark: isDark, scale: scale);
+                          // showMsg(context,
+                          //     'Location updated! Showing earthquakes near you.');
                         } catch (e) {
                           EasyLoading.dismiss();
-                          showMsg(context,
-                              'Failed to get location. Please check permissions.');
+                          showPillSnackBar(context, message: 'Failed to get location.', isDark: isDark, scale: scale);
+                          // showMsg(context,
+                          //     'Failed to get location. Please check permissions.');
                         }
                       } else {
                         // When turning off location
@@ -116,25 +190,28 @@ class _SettingsPageState extends State<SettingsPage> {
                         await provider.setLocation(false);
                         await provider.getEarthQuakeData();
                         EasyLoading.dismiss();
-                        showMsg(context,
-                            'Location disabled. Showing global earthquakes.');
+                        showPillSnackBar(context, message: 'Location Disabled', isDark: isDark, scale: scale);
                       }
                     },
                   ),
                 ],
               ),
             ),
-            Gap(30),
+            Gap(h * 0.02), // 30
             Card(
               child: ListTile(
-                title: Text(isDark ? 'Light Mode' : 'Dark Mode'),
+                title: Text(
+                  isDark ? 'Light Mode' : 'Dark Mode',
+                  style: TextStyle(fontSize: 16 * scale),
+                ),
                 trailing: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: isDark ? Colors.white12 : Colors.white,
                     elevation: 10,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(w * 0.08), //30
                     ),
+                    padding: EdgeInsets.all(w * 0.015),
                   ),
                   onPressed: () {
                     setState(() {
@@ -142,7 +219,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     });
                     theme.toggle();
                   },
-                  child: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
+                  child: Icon(
+                    isDark ? Icons.light_mode : Icons.dark_mode,
+                    size: 22 * scale,
+                  ),
                 ),
               ),
             ),

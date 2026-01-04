@@ -25,29 +25,40 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final w = size.width;
+    final h = size.height;
+    final scale = w / 375;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('EarthQuake App'),
+        title: Text(
+          'QuakeTrace',
+          style: TextStyle(fontSize: 18 * scale),
+        ),
         actions: [
           // Location indicator
           Consumer<AppDataProvider>(
             builder: (context, provider, child) => provider.shouldUseLocation
                 ? Container(
-                    margin: EdgeInsets.only(right: 8),
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    margin: EdgeInsets.only(right: w * 0.02),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: w * 0.02,
+                      vertical: h * 0.004,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.green.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(w * 0.03),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.location_on, size: 16, color: Colors.green),
-                        SizedBox(width: 4),
+                        Icon(Icons.location_on, size: 16 * scale, color: Colors.green),
+                        SizedBox(width: w * 0.01),
                         Text(
                           provider.currentCity ?? 'Near you',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 12 * scale,
                             color: Colors.green,
                             fontWeight: FontWeight.bold,
                           ),
@@ -59,56 +70,105 @@ class _HomePageState extends State<HomePage> {
           ),
           IconButton(
             onPressed: _showSortingDialog,
-            icon: Icon(Icons.sort),
+            icon: Icon(Icons.sort, size: scale * 22,),
             tooltip: 'Sort earthquakes',
           ),
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MapPage()),
-              );
-            },
-            icon: Icon(Icons.map),
-            tooltip: 'View on map',
-          ),
+          // IconButton(
+          //   onPressed: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => MapPage()),
+          //     );
+          //   },
+          //   icon: Icon(Icons.map),
+          //   tooltip: 'View on map',
+          // ),
           IconButton(
             onPressed: () =>
                 Navigator.push(context, CustomPageRoute(child: SettingsPage())),
-            icon: Icon(Icons.settings),
+            icon: Icon(Icons.settings, size: 22 * scale),
             tooltip: 'Settings',
           ),
         ],
       ),
+
       body: Consumer<AppDataProvider>(
-        builder: (context, provider, child) => provider.hasDataLoaded
-            ? provider.earthquakeModels!.features!.isEmpty
-                ? Center(
-                    child: Text('No record found'),
-                  )
-                : ListView.builder(
-                    itemCount: provider.earthquakeModels!.features!.length,
-                    itemBuilder: (context, index) {
-                      final data = provider
-                          .earthquakeModels!.features![index].properties!;
-                      return ListTile(
-                        title: Text(data.place ?? data.title ?? 'Unknown'),
-                        subtitle: Text(getFormatedDateTime(
-                            data.time!, 'EEE MMM dd yyyy hh:mm a')),
-                        trailing: Chip(
-                          avatar: data.alert == null
-                              ? null
-                              : CircleAvatar(
-                                  backgroundColor:
-                                      provider.getAlertColor(data.alert!),
-                                ),
-                          label: Text('${data.mag}'),
-                        ),
-                      );
-                    })
-            : Center(
-                child: Text('Please Wait'),
+        builder: (context, provider, child) {
+          // 1️⃣ NO INTERNET STATE
+          if (provider.internetStatus == InternetStatus.disconnected) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.wifi_off, size: 80 * scale, color: Colors.lightBlueAccent),
+                  SizedBox(height: h * 0.02),
+                  Text(
+                    'Sorry, no internet connection',
+                    style: TextStyle(
+                      fontSize: 18 * scale,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  // SizedBox(height: 8),
+                  // Text('Please turn on your internet and try again'),
+                  SizedBox(height: h * 0.03),
+                  ElevatedButton(
+                    onPressed: provider.retry,
+                    child: Text('Retry', style: TextStyle(fontSize: 14 * scale),),
+                  ),
+                ],
               ),
+            );
+          }
+
+          // 2️⃣ LOADING STATE
+          if (!provider.hasDataLoaded) {
+            return Center(
+                child: Text(
+              'Please Wait',
+              style: TextStyle(fontSize: 20 * scale),
+            ));
+          }
+
+          // 3️⃣ EMPTY DATA
+          if (provider.earthquakeModels!.features!.isEmpty) {
+            return Center(child: Text('No record found', style: TextStyle(fontSize: 16 * scale),));
+          }
+
+          // 4️⃣ NORMAL WORKING UI (UNCHANGED)
+          return RefreshIndicator(
+            onRefresh: provider.internetStatus == InternetStatus.connected
+                ? provider.retry
+                : () async {},
+            child: ListView.builder(
+              itemCount: provider.earthquakeModels!.features!.length,
+              itemBuilder: (context, index) {
+                final data =
+                    provider.earthquakeModels!.features![index].properties!;
+                return ListTile(
+                  title: Text(data.place ?? data.title ?? 'Unknown', style: TextStyle(fontSize: 14 * scale),),
+                  subtitle: Text(
+                    getFormatedDateTime(
+                      data.time!,
+                      'EEE MMM dd yyyy hh:mm a',
+                    ),
+                    style: TextStyle(fontSize: 12 * scale),
+                  ),
+                  trailing: Chip(
+                    avatar: data.alert == null
+                        ? null
+                        : CircleAvatar(
+                      radius: 10 * scale,
+                            backgroundColor:
+                                provider.getAlertColor(data.alert!),
+                          ),
+                    label: Text('${data.mag}', style: TextStyle(fontSize: 12 * scale),),
+                  ),
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }

@@ -7,10 +7,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:geocoding/geocoding.dart' as gc;
+import 'package:connectivity_plus/connectivity_plus.dart';
+
+enum InternetStatus {
+  loading,
+  connected,
+  disconnected,
+}
 
 class AppDataProvider with ChangeNotifier{
   final baseurl = Uri.parse('https://earthquake.usgs.gov/fdsnws/event/1/query');
   Map<String, dynamic> queryParams = {};
+  InternetStatus internetStatus = InternetStatus.loading;
   double _maxRadiusikm = 500;
   double _latitude = 0.0, _longitude = 0.0;
   String _startTime = '' , _endTime = '';
@@ -61,13 +69,41 @@ class AppDataProvider with ChangeNotifier{
     queryParams['maxradiuskm'] = '$_maxRadiusikm';
   }
 
-  init() {
-    _startTime = getFormatedDateTime(DateTime.now().subtract(Duration(days: 1)).millisecondsSinceEpoch);
-    _endTime = getFormatedDateTime(DateTime.now().millisecondsSinceEpoch);
+  // init() {
+  //   _startTime = getFormatedDateTime(DateTime.now().subtract(Duration(days: 1)).millisecondsSinceEpoch);
+  //   _endTime = getFormatedDateTime(DateTime.now().millisecondsSinceEpoch);
+  //   _maxRadiusikm = maxRadiusKmThreshold;
+  //   _setQueryParams();
+  //   getEarthQuakeData();
+  // }
+
+  Future<void> init() async {
+    internetStatus = InternetStatus.loading;
+    notifyListeners();
+
+    final connectivityResult =
+    await Connectivity().checkConnectivity();
+
+    if (connectivityResult == ConnectivityResult.none) {
+      internetStatus = InternetStatus.disconnected;
+      notifyListeners();
+      return;
+    }
+
+    internetStatus = InternetStatus.connected;
+
+    _startTime = getFormatedDateTime(
+      DateTime.now().subtract(const Duration(days: 1)).millisecondsSinceEpoch,
+    );
+    _endTime = getFormatedDateTime(
+      DateTime.now().millisecondsSinceEpoch,
+    );
     _maxRadiusikm = maxRadiusKmThreshold;
+
     _setQueryParams();
-    getEarthQuakeData();
+    await getEarthQuakeData();
   }
+
 
   Color getAlertColor(String color) {
     return switch(color) {
@@ -78,21 +114,48 @@ class AppDataProvider with ChangeNotifier{
     };
   }
 
-  Future<void> getEarthQuakeData() async{
-    final uri = Uri.https(baseurl.authority, baseurl.path, queryParams);
-    try{
+  // Future<void> getEarthQuakeData() async{
+  //   final uri = Uri.https(baseurl.authority, baseurl.path, queryParams);
+  //   try{
+  //     final response = await http.get(uri);
+  //     if(response.statusCode == 200) {
+  //       final json = jsonDecode(response.body);
+  //       earthquakeModels = EarthquakeModels.fromJson(json);
+  //       print(earthquakeModels!.features!.length);
+  //       notifyListeners();
+  //     }
+  //   }
+  //   catch(error){
+  //     print(error.toString());
+  //   }
+  // }
+
+  Future<void> getEarthQuakeData() async {
+    try {
+      final uri = Uri.https(
+        baseurl.authority,
+        baseurl.path,
+        queryParams,
+      );
+
       final response = await http.get(uri);
-      if(response.statusCode == 200) {
+
+      if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
         earthquakeModels = EarthquakeModels.fromJson(json);
-        print(earthquakeModels!.features!.length);
         notifyListeners();
       }
-    }
-    catch(error){
-      print(error.toString());
+    } catch (error) {
+      internetStatus = InternetStatus.disconnected;
+      notifyListeners();
     }
   }
+
+  Future<void> retry() async {
+    earthquakeModels = null;
+    await init();
+  }
+
 
   void setStartTime(String date) {
     _startTime = date;
