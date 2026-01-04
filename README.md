@@ -189,7 +189,7 @@ Want to contribute? Check out the [open issues](https://github.com/Fenirok/Earth
 
 ## 📜 License
 
-This project is open-source and available under the **MIT License**.
+This project is open-source and available under the **Apache License 2.0**.
 
 ---
 
