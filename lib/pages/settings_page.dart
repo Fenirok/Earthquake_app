@@ -15,14 +15,13 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-
   void showPillSnackBar(
-      BuildContext context, {
-        required String message,
-        required bool isDark,
-        required double scale,
-        Duration duration = const Duration(seconds: 3),
-      }) {
+    BuildContext context, {
+    required String message,
+    required bool isDark,
+    required double scale,
+    Duration duration = const Duration(seconds: 3),
+  }) {
     final w = MediaQuery.of(context).size.width;
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -130,7 +129,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     onPressed: () {
                       provider.getEarthQuakeData();
-                      showPillSnackBar(context, message: 'Times are Updated', isDark: isDark, scale: scale);
+                      showPillSnackBar(context,
+                          message: 'Times are Updated',
+                          isDark: isDark,
+                          scale: scale);
                       //showMsg(context, 'Times are Updated');
                     },
                     child: Text(
@@ -155,19 +157,18 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: [
                   SwitchListTile(
                     title: Text(
-              provider.shouldUseLocation
-              ? 'Using your location'
-                  : 'Use your Location',
-              ),
-              subtitle: provider.shouldUseLocation
-                  ? Text(
-                'Earthquake data will be shown within ${provider.maxRadiusikm} km radius near you',
-              )
-                  : Text(
-                'Tap to enable location services',
-              ),
-
-              value: provider.shouldUseLocation,
+                      provider.shouldUseLocation
+                          ? 'Using your location'
+                          : 'Use your Location',
+                    ),
+                    subtitle: provider.shouldUseLocation
+                        ? Text(
+                            'Earthquake data will be shown within ${provider.maxRadiusKM} km radius near you',
+                          )
+                        : Text(
+                            'Tap to enable location services',
+                          ),
+                    value: provider.shouldUseLocation,
                     onChanged: (value) async {
                       if (value) {
                         // When turning on location
@@ -175,14 +176,20 @@ class _SettingsPageState extends State<SettingsPage> {
                         try {
                           await provider.setLocation(true);
                           // After getting location, fetch earthquake data for that area
-                          await provider.getEarthQuakeData();
+                          //await provider.getEarthQuakeData();
                           EasyLoading.dismiss();
-                          showPillSnackBar(context, message: "Showing earthquakes near you.", isDark: isDark, scale: scale);
+                          showPillSnackBar(context,
+                              message: "Showing earthquakes near you.",
+                              isDark: isDark,
+                              scale: scale);
                           // showMsg(context,
                           //     'Location updated! Showing earthquakes near you.');
                         } catch (e) {
                           EasyLoading.dismiss();
-                          showPillSnackBar(context, message: 'Failed to get location.', isDark: isDark, scale: scale);
+                          showPillSnackBar(context,
+                              message: 'Failed to get location.',
+                              isDark: isDark,
+                              scale: scale);
                           // showMsg(context,
                           //     'Failed to get location. Please check permissions.');
                         }
@@ -190,9 +197,12 @@ class _SettingsPageState extends State<SettingsPage> {
                         // When turning off location
                         EasyLoading.show(status: 'Updating settings...');
                         await provider.setLocation(false);
-                        await provider.getEarthQuakeData();
+                        //await provider.getEarthQuakeData();
                         EasyLoading.dismiss();
-                        showPillSnackBar(context, message: 'Location Disabled', isDark: isDark, scale: scale);
+                        showPillSnackBar(context,
+                            message: 'Location Disabled',
+                            isDark: isDark,
+                            scale: scale);
                       }
                     },
                   ),

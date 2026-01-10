@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                         Icon(Icons.location_on, size: 16 * scale, color: Colors.green),
                         SizedBox(width: w * 0.01),
                         Text(
-                          provider.currentCity ?? 'Near you',
+                          'Near your Location', //provider.currentCity ?? 'Near you',
                           style: TextStyle(
                             fontSize: 12 * scale,
                             color: Colors.green,

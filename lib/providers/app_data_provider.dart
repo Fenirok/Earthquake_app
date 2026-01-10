@@ -20,7 +20,7 @@ class AppDataProvider with ChangeNotifier{
   final baseurl = Uri.parse('https://earthquake.usgs.gov/fdsnws/event/1/query');
   Map<String, dynamic> queryParams = {};
   InternetStatus internetStatus = InternetStatus.loading;
-  double _maxRadiusikm = 500;
+  late double _maxRadiusKM;
   double _latitude = 0.0, _longitude = 0.0;
   String _startTime = '' , _endTime = '';
   String _orderBy = 'time';
@@ -30,7 +30,7 @@ class AppDataProvider with ChangeNotifier{
   EarthquakeModels? earthquakeModels;
   final Location _location = Location();
 
-  double get maxRadiusikm => _maxRadiusikm;
+  double get maxRadiusKM => _maxRadiusKM;
 
   double get latitude => _latitude;
 
@@ -42,7 +42,7 @@ class AppDataProvider with ChangeNotifier{
 
   String get orderBy => _orderBy;
 
-  String? get currentCity => _currentCity;
+  //String? get currentCity => _currentCity;
 
   double get maxRadiusKmThreshold => _maxRadiusKmThreshold;
 
@@ -79,7 +79,7 @@ class AppDataProvider with ChangeNotifier{
     _endTime = getFormatedDateTime(
       DateTime.now().millisecondsSinceEpoch,
     );
-    _maxRadiusikm = maxRadiusKmThreshold;
+    _maxRadiusKM = maxRadiusKmThreshold;
 
     _setQueryParams();
     await getEarthQuakeData();
@@ -94,7 +94,7 @@ class AppDataProvider with ChangeNotifier{
     queryParams['limit'] = '500';
     queryParams['latitude'] = '$_latitude';
     queryParams['longitude'] = '$_longitude';
-    queryParams['maxradiuskm'] = '$_maxRadiusikm';
+    queryParams['maxradiuskm'] = '$_maxRadiusKM';
   }
 
 
@@ -171,25 +171,27 @@ class AppDataProvider with ChangeNotifier{
 
   Future<void> setLocation(bool value) async {
     _shouldUseLocation = value;
-    notifyListeners();
+    //notifyListeners();
 
     if (value) {
       final locationData = await _getLocation();
       _latitude = locationData.latitude ?? 0.0;
       _longitude = locationData.longitude ?? 0.0;
 
-      await _getCurrentCity();
+      // await _getCurrentCity();
 
-      _maxRadiusikm = 500;
+      _maxRadiusKM = 500;
     } else {
       _latitude = 0.0;
       _longitude = 0.0;
-      _currentCity = null;
-      _maxRadiusikm = _maxRadiusKmThreshold;
+      //_currentCity = null;
+      _maxRadiusKM = _maxRadiusKmThreshold;
     }
 
     _setQueryParams();
-    getEarthQuakeData();
+    await getEarthQuakeData();
+
+    notifyListeners();
   }
 
   // Future<void> setLocation(bool value) async{
@@ -237,40 +239,40 @@ class AppDataProvider with ChangeNotifier{
     return await _location.getLocation();
   }
 
-  Future<void> _getCurrentCity() async {
-    try {
-      final uri = Uri.parse(
-        'https://nominatim.openstreetmap.org/reverse'
-            '?format=json'
-            '&lat=$_latitude'
-            '&lon=$_longitude'
-            '&zoom=10'
-            '&addressdetails=1',
-      );
-
-      final response = await http.get(
-        uri,
-        headers: {
-          'User-Agent': 'QuakeTrace (contact: aditya@example.com)',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final address = data['address'];
-
-        _currentCity =
-            address['city'] ??
-                address['town'] ??
-                address['village'] ??
-                address['state'];
-
-        notifyListeners();
-      }
-    } catch (e) {
-      debugPrint('Reverse geocoding failed: $e');
-    }
-  }
+  // Future<void> _getCurrentCity() async {
+  //   try {
+  //     final uri = Uri.parse(
+  //       'https://nominatim.openstreetmap.org/reverse'
+  //           '?format=json'
+  //           '&lat=$_latitude'
+  //           '&lon=$_longitude'
+  //           '&zoom=10'
+  //           '&addressdetails=1',
+  //     );
+  //
+  //     final response = await http.get(
+  //       uri,
+  //       headers: {
+  //         'User-Agent': 'QuakeTrace (contact: aditya@example.com)',
+  //       },
+  //     );
+  //
+  //     if (response.statusCode == 200) {
+  //       final data = jsonDecode(response.body);
+  //       final address = data['address'];
+  //
+  //       _currentCity =
+  //           address['city'] ??
+  //               address['town'] ??
+  //               address['village'] ??
+  //               address['state'];
+  //
+  //       notifyListeners();
+  //     }
+  //   } catch (e) {
+  //     debugPrint('Reverse geocoding failed: $e');
+  //   }
+  // }
 
   // Future<void> _getCurrentCity() async{
   //   try{

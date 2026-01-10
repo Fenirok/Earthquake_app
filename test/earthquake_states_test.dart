@@ -91,7 +91,7 @@ class FakeAppDataProvider extends ChangeNotifier
   Color getAlertColor(String color) => Colors.red;
 
   @override
-  double get maxRadiusikm => 0.0;
+  double get maxRadiusKM => 0.0;
 
   @override
   double get latitude => 0.0;
@@ -108,8 +108,8 @@ class FakeAppDataProvider extends ChangeNotifier
   @override
   String get orderBy => '';
 
-  @override
-  String? get currentCity => null;
+  // @override
+  // String? get currentCity => null;
 
   @override
   double get maxRadiusKmThreshold => 0.0;
