@@ -5,6 +5,13 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+//configurations.all {
+//    exclude group: 'com.google.android.gms', module: 'play-services-location'
+//    exclude group: 'com.google.android.gms', module: 'play-services-base'
+//    exclude group: 'com.google.android.gms', module: 'play-services-basement'
+//    exclude group: 'com.google.android.gms', module: 'play-services-tasks'
+//}
+
 android {
     namespace = "com.aditya.earthquake_app"
     compileSdk = 35

@@ -40,10 +40,10 @@ dependencies:
   http:
   flutter_easyloading:
   gap:
-  location:
+  #location:
   flutter_map: ^6.1.0
   latlong2: ^0.9.1
-  connectivity_plus: ^5.0.2
+  #connectivity_plus: ^5.0.2
   flutter_map_marker_cluster: ^1.3.6
 dev_dependencies:
   flutter_test:

@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 //import 'package:geocoding/geocoding.dart' as gc;
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:location/location.dart';
+//import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:earthquake_app/platform/location_channel.dart';
+//import 'package:location/location.dart';
 
 enum InternetStatus {
   loading,
@@ -28,7 +29,7 @@ class AppDataProvider with ChangeNotifier{
   final double _maxRadiusKmThreshold = 20001.6;
   bool _shouldUseLocation = false;
   EarthquakeModels? earthquakeModels;
-  final Location _location = Location();
+  //final Location _location = Location();
 
   double get maxRadiusKM => _maxRadiusKM;
 
@@ -62,16 +63,16 @@ class AppDataProvider with ChangeNotifier{
     internetStatus = InternetStatus.loading;
     notifyListeners();
 
-    final connectivityResult =
-    await Connectivity().checkConnectivity();
+    // final connectivityResult =
+    // await Connectivity().checkConnectivity();
+    //
+    // if (connectivityResult == ConnectivityResult.none) {
+    //   internetStatus = InternetStatus.disconnected;
+    //   notifyListeners();
+    //   return;
+    // }
 
-    if (connectivityResult == ConnectivityResult.none) {
-      internetStatus = InternetStatus.disconnected;
-      notifyListeners();
-      return;
-    }
-
-    internetStatus = InternetStatus.connected;
+    // internetStatus = InternetStatus.connected;
 
     _startTime = getFormatedDateTime(
       DateTime.now().subtract(const Duration(days: 1)).millisecondsSinceEpoch,
@@ -169,30 +170,50 @@ class AppDataProvider with ChangeNotifier{
     notifyListeners();
   }
 
+
+
   Future<void> setLocation(bool value) async {
     _shouldUseLocation = value;
-    //notifyListeners();
 
     if (value) {
-      final locationData = await _getLocation();
-      _latitude = locationData.latitude ?? 0.0;
-      _longitude = locationData.longitude ?? 0.0;
-
-      // await _getCurrentCity();
-
+      final loc = await NativeLocation.getLocation();
+      _latitude = loc['latitude']!;
+      _longitude = loc['longitude']!;
       _maxRadiusKM = 500;
     } else {
       _latitude = 0.0;
       _longitude = 0.0;
-      //_currentCity = null;
       _maxRadiusKM = _maxRadiusKmThreshold;
     }
 
     _setQueryParams();
     await getEarthQuakeData();
-
     notifyListeners();
   }
+
+
+  // Future<void> setLocation(bool value) async {
+  //   _shouldUseLocation = value;
+  //
+  //   if (value) {
+  //     final locationData = await _getLocation();
+  //     _latitude = locationData.latitude ?? 0.0;
+  //     _longitude = locationData.longitude ?? 0.0;
+  //
+  //     _maxRadiusKM = 500;
+  //   } else {
+  //     _latitude = 0.0;
+  //     _longitude = 0.0;
+  //     //_currentCity = null;
+  //     _maxRadiusKM = _maxRadiusKmThreshold;
+  //   }
+  //
+  //   _setQueryParams();
+  //   await getEarthQuakeData();
+  //
+  //   notifyListeners();
+  // }
+
 
   // Future<void> setLocation(bool value) async{
   //   _shouldUseLocation = value;
@@ -216,28 +237,28 @@ class AppDataProvider with ChangeNotifier{
   //   }
   // }
 
-  Future<LocationData> _getLocation() async {
-    bool serviceEnabled;
-    PermissionStatus permissionGranted;
-
-    serviceEnabled = await _location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await _location.requestService();
-      if (!serviceEnabled) {
-        throw Exception('Location services are disabled.');
-      }
-    }
-
-    permissionGranted = await _location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await _location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        throw Exception('Location permission denied.');
-      }
-    }
-
-    return await _location.getLocation();
-  }
+  // Future<LocationData> _getLocation() async {
+  //   bool serviceEnabled;
+  //   PermissionStatus permissionGranted;
+  //
+  //   serviceEnabled = await _location.serviceEnabled();
+  //   if (!serviceEnabled) {
+  //     serviceEnabled = await _location.requestService();
+  //     if (!serviceEnabled) {
+  //       throw Exception('Location services are disabled.');
+  //     }
+  //   }
+  //
+  //   permissionGranted = await _location.hasPermission();
+  //   if (permissionGranted == PermissionStatus.denied) {
+  //     permissionGranted = await _location.requestPermission();
+  //     if (permissionGranted != PermissionStatus.granted) {
+  //       throw Exception('Location permission denied.');
+  //     }
+  //   }
+  //
+  //   return await _location.getLocation();
+  // }
 
   // Future<void> _getCurrentCity() async {
   //   try {
@@ -331,6 +352,7 @@ class AppDataProvider with ChangeNotifier{
   //   return await Geolocator.getCurrentPosition();
   // }
 }
+
 
 
 
