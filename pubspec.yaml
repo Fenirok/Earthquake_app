@@ -38,10 +38,9 @@ dependencies:
   intl:
   provider:
   http:
-  geolocator:
-  geocoding:
   flutter_easyloading:
   gap:
+  location:
   flutter_map: ^6.1.0
   latlong2: ^0.9.1
   connectivity_plus: ^5.0.2

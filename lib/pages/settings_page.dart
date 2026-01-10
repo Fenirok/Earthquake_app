@@ -155,17 +155,19 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: [
                   SwitchListTile(
                     title: Text(
-                      provider.currentCity ?? 'Your city is unknown',
-                      style: TextStyle(fontSize: 16 * scale),
-                    ),
-                    subtitle: provider.currentCity == null
-                        ? Text(
-                            'Tap to enable location services',
-                            style: TextStyle(fontSize: 13 * scale),
-                          )
-                        : Text(
-                            'EarthQuake data will be shown within ${provider.maxRadiusikm} km radius from ${provider.currentCity}'),
-                    value: provider.shouldUseLocation,
+              provider.shouldUseLocation
+              ? 'Using your location'
+                  : 'Use your Location',
+              ),
+              subtitle: provider.shouldUseLocation
+                  ? Text(
+                'Earthquake data will be shown within ${provider.maxRadiusikm} km radius near you',
+              )
+                  : Text(
+                'Tap to enable location services',
+              ),
+
+              value: provider.shouldUseLocation,
                     onChanged: (value) async {
                       if (value) {
                         // When turning on location

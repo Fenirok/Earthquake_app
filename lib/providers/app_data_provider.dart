@@ -1,13 +1,14 @@
 import 'dart:convert';
-import 'package:geolocator/geolocator.dart';
+//import 'package:geolocator/geolocator.dart';
 import 'package:earthquake_app/models/earthquake_models.dart';
 import 'package:earthquake_app/utils/helper_functions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:geocoding/geocoding.dart' as gc;
+//import 'package:geocoding/geocoding.dart' as gc;
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:location/location.dart';
 
 enum InternetStatus {
   loading,
@@ -27,6 +28,7 @@ class AppDataProvider with ChangeNotifier{
   final double _maxRadiusKmThreshold = 20001.6;
   bool _shouldUseLocation = false;
   EarthquakeModels? earthquakeModels;
+  final Location _location = Location();
 
   double get maxRadiusikm => _maxRadiusikm;
 
@@ -47,27 +49,6 @@ class AppDataProvider with ChangeNotifier{
   bool get shouldUseLocation => _shouldUseLocation;
 
   bool get hasDataLoaded => earthquakeModels != null;
-
-
-  void setOrder(String value) {
-    _orderBy = value;
-    notifyListeners();
-    _setQueryParams();
-    getEarthQuakeData();
-  }
-
-
-  _setQueryParams() {
-    queryParams['format'] = 'geojson';
-    queryParams['starttime'] = _startTime;
-    queryParams['endtime'] = _endTime;
-    queryParams['minmagnitude'] = '4';
-    queryParams['orderby'] = _orderBy;
-    queryParams['limit'] = '500';
-    queryParams['latitude'] = '$_latitude';
-    queryParams['longitude'] = '$_longitude';
-    queryParams['maxradiuskm'] = '$_maxRadiusikm';
-  }
 
   // init() {
   //   _startTime = getFormatedDateTime(DateTime.now().subtract(Duration(days: 1)).millisecondsSinceEpoch);
@@ -102,6 +83,18 @@ class AppDataProvider with ChangeNotifier{
 
     _setQueryParams();
     await getEarthQuakeData();
+  }
+
+  _setQueryParams() {
+    queryParams['format'] = 'geojson';
+    queryParams['starttime'] = _startTime;
+    queryParams['endtime'] = _endTime;
+    queryParams['minmagnitude'] = '4';
+    queryParams['orderby'] = _orderBy;
+    queryParams['limit'] = '500';
+    queryParams['latitude'] = '$_latitude';
+    queryParams['longitude'] = '$_longitude';
+    queryParams['maxradiuskm'] = '$_maxRadiusikm';
   }
 
 
@@ -156,6 +149,13 @@ class AppDataProvider with ChangeNotifier{
     await init();
   }
 
+  void setOrder(String value) {
+    _orderBy = value;
+    notifyListeners();
+    _setQueryParams();
+    getEarthQuakeData();
+  }
+
 
   void setStartTime(String date) {
     _startTime = date;
@@ -169,41 +169,122 @@ class AppDataProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  Future<void> setLocation(bool value) async{
+  Future<void> setLocation(bool value) async {
     _shouldUseLocation = value;
     notifyListeners();
-    if(value) {
-      final position = await _determinePosition();
-      _latitude = position.latitude;
-      _longitude = position.longitude;
+
+    if (value) {
+      final locationData = await _getLocation();
+      _latitude = locationData.latitude ?? 0.0;
+      _longitude = locationData.longitude ?? 0.0;
+
       await _getCurrentCity();
+
       _maxRadiusikm = 500;
-      _setQueryParams();
-      getEarthQuakeData();
-    }
-    else{
+    } else {
       _latitude = 0.0;
       _longitude = 0.0;
-      _maxRadiusikm = _maxRadiusKmThreshold;
       _currentCity = null;
-      _setQueryParams();
-      getEarthQuakeData();
+      _maxRadiusikm = _maxRadiusKmThreshold;
+    }
+
+    _setQueryParams();
+    getEarthQuakeData();
+  }
+
+  // Future<void> setLocation(bool value) async{
+  //   _shouldUseLocation = value;
+  //   notifyListeners();
+  //   if(value) {
+  //     final position = await _determinePosition();
+  //     _latitude = position.latitude;
+  //     _longitude = position.longitude;
+  //     await _getCurrentCity();
+  //     _maxRadiusikm = 500;
+  //     _setQueryParams();
+  //     getEarthQuakeData();
+  //   }
+  //   else{
+  //     _latitude = 0.0;
+  //     _longitude = 0.0;
+  //     _maxRadiusikm = _maxRadiusKmThreshold;
+  //     _currentCity = null;
+  //     _setQueryParams();
+  //     getEarthQuakeData();
+  //   }
+  // }
+
+  Future<LocationData> _getLocation() async {
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
+
+    serviceEnabled = await _location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await _location.requestService();
+      if (!serviceEnabled) {
+        throw Exception('Location services are disabled.');
+      }
+    }
+
+    permissionGranted = await _location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await _location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        throw Exception('Location permission denied.');
+      }
+    }
+
+    return await _location.getLocation();
+  }
+
+  Future<void> _getCurrentCity() async {
+    try {
+      final uri = Uri.parse(
+        'https://nominatim.openstreetmap.org/reverse'
+            '?format=json'
+            '&lat=$_latitude'
+            '&lon=$_longitude'
+            '&zoom=10'
+            '&addressdetails=1',
+      );
+
+      final response = await http.get(
+        uri,
+        headers: {
+          'User-Agent': 'QuakeTrace (contact: aditya@example.com)',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final address = data['address'];
+
+        _currentCity =
+            address['city'] ??
+                address['town'] ??
+                address['village'] ??
+                address['state'];
+
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Reverse geocoding failed: $e');
     }
   }
 
-  Future<void> _getCurrentCity() async{
-    try{
-      final placemarkList = await gc.placemarkFromCoordinates(_latitude, _longitude);
-      if(placemarkList.isNotEmpty) {
-        final placemark = placemarkList.first;
-        _currentCity = placemark.locality;
-        notifyListeners();
-      }
-    }
-    catch(error){
-      print(error);
-    }
-  }
+  // Future<void> _getCurrentCity() async{
+  //   try{
+  //     final placemarkList = await gc.placemarkFromCoordinates(_latitude, _longitude);
+  //     if(placemarkList.isNotEmpty) {
+  //       final placemark = placemarkList.first;
+  //       _currentCity = placemark.locality;
+  //       notifyListeners();
+  //     }
+  //   }
+  //   catch(error){
+  //     print(error);
+  //   }
+  // }
 
 
 
@@ -211,42 +292,42 @@ class AppDataProvider with ChangeNotifier{
   ///
   /// When the location services are not enabled or permissions
   /// are denied the `Future` will return an error.
-  Future<Position> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition();
-  }
+  // Future<Position> _determinePosition() async {
+  //   bool serviceEnabled;
+  //   LocationPermission permission;
+  //
+  //   // Test if location services are enabled.
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     // Location services are not enabled don't continue
+  //     // accessing the position and request users of the
+  //     // App to enable the location services.
+  //     return Future.error('Location services are disabled.');
+  //   }
+  //
+  //   permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       // Permissions are denied, next time you could try
+  //       // requesting permissions again (this is also where
+  //       // Android's shouldShowRequestPermissionRationale
+  //       // returned true. According to Android guidelines
+  //       // your App should show an explanatory UI now.
+  //       return Future.error('Location permissions are denied');
+  //     }
+  //   }
+  //
+  //   if (permission == LocationPermission.deniedForever) {
+  //     // Permissions are denied forever, handle appropriately.
+  //     return Future.error(
+  //         'Location permissions are permanently denied, we cannot request permissions.');
+  //   }
+  //
+  //   // When we reach here, permissions are granted and we can
+  //   // continue accessing the position of the device.
+  //   return await Geolocator.getCurrentPosition();
+  // }
 }
 
 

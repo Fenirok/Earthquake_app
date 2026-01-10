@@ -30,11 +30,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   @override
-  void didChangeDependencies() {
-    Provider.of<AppDataProvider>(context, listen: false).init();
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AppDataProvider>().init();
+    });
   }
+
+  // @override
+  // void didChangeDependencies() {
+  //   // Provider.of<AppDataProvider>(context, listen: false).init();
+  //   super.didChangeDependencies();
+  // }
 
   @override
   Widget build(BuildContext context) {
