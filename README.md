@@ -70,13 +70,9 @@ Certainly! Below are the **Contributing Guidelines** and **Code of Conduct** sec
 
 ---
 
-## 📂 Installation & Setup
+## 🤝 Contributing Guidelines
 
-1. Clone the repository:
 
-   ```sh
-   git clone https://github.com/Fenirok/Earthquake_app.git
-   ```
 
 2. Navigate to the project directory:
 
@@ -120,46 +116,24 @@ Earthquake_app/
 
 ## 🤝 Contributing Guidelines
 
-We’re excited to welcome contributions! Please follow these steps to make sure your changes are merged into the correct branch (`test1`):
+We welcome contributions from the community to improve the Earthquake Tracker App! To contribute:
 
-
-1. **Fork the Repository**  
-   Click the **Fork** button in the top-right corner of the [Earthquake Tracker App repository](https://github.com/Fenirok/Earthquake_app) to create your own copy.
-
-2. **Clone Your Fork Locally**  
-   ```bash
-   git clone https://github.com/your-username/Earthquake_app.git
-   cd Earthquake_app
+1. Fork the repository.
+2. Create a new branch:
+   ```sh
+   git checkout -b feature/YourFeatureName
    ```
-
-3. **Create a New Branch**  
-   It's a good practice to work in a feature branch:
-   ```bash
-   git checkout -b your-feature-name
+3. Make your changes and commit them:
+   ```sh
+   git commit -m 'Add some feature'
    ```
-
-4. **Make Your Changes**  
-   Add your feature, fix bugs, or improve documentation as needed.
-
-5. **Push Your Changes**  
-   ```bash
-   git add .
-   git commit -m "Add: brief description of your changes"
-   git push origin your-feature-name
+4. Push to your branch:
+   ```sh
+   git push origin feature/YourFeatureName
    ```
+5. Open a Pull Request describing your changes.
 
-6. **Create a Pull Request**  
-   - Go to your forked repository on GitHub.  
-   - Click **“Compare & pull request”**.  
-   - **Change the base branch to `test1` (not `master`)**:
-     > ✅ `base: Fenirok: test1`  
-     > ✅ `compare: your-username: your-feature-name`
-
-7. **Submit Your Pull Request**  
-   Provide a clear title and description for your changes. Then click **“Create pull request”**.
-
-### ⚠️ Important:
-Please do **not** submit pull requests to the `master` branch. All contributions should target the `test1` branch to ensure stability and testing before merging to production.
+Please make sure your code follows the existing style and is well-documented. Run all tests before submitting a PR.
 
 ---
 
